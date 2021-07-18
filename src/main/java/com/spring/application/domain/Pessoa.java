@@ -2,6 +2,7 @@ package com.spring.application.domain;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Objects;
 
 @Entity
@@ -20,8 +21,8 @@ public class Pessoa implements Serializable {
     private String cpf;
     @Column(nullable = false, length = 10)
     private String dataNacimento;
-
-//    private ArrayList<Contato> contatos;
+    @Column
+    private ArrayList<Contato> contatos = new ArrayList<>();
 
     public Pessoa() {
 
@@ -29,11 +30,11 @@ public class Pessoa implements Serializable {
 
     public Pessoa(Integer id, String nome, String cpf, String dataNacimento) {
         super();
-//        contatos = new ArrayList<Contato>();
         this.id = id;
         this.nome = nome;
         this.cpf = cpf;
         this.dataNacimento = dataNacimento;
+        this.contatos = contatos;
     }
 
     public Integer getId() {
@@ -63,14 +64,17 @@ public class Pessoa implements Serializable {
         this.cpf = cpf;
     }
 
-
-    public String getDataNacimento() {
-        return dataNacimento;
+    public String getDataNacimento() { return dataNacimento;
     }
-
-
     public void setDataNacimento(String dataNacimento) {
         this.dataNacimento = dataNacimento;
+    }
+    public ArrayList<Contato> getContatos() {
+        return contatos;
+    }
+
+    public void adicionaContatos(Contato contato) {
+        contatos.add(contato);
     }
 
     @Override
@@ -89,4 +93,5 @@ public class Pessoa implements Serializable {
         Pessoa other = (Pessoa) obj;
         return Objects.equals(id, other.id);
     }
+
 }
