@@ -1,47 +1,46 @@
 package com.spring.application.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Table(name = "tb_pessoa")
-public class Pessoa implements Serializable {
+public class Pessoa implements Serializable{
 
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
-
-    @Column(nullable = false, length = 50)
+    private Long id;
     private String nome;
-    @Column(nullable = false, length = 10)
     private String cpf;
-    @Column(nullable = false, length = 10)
     private String dataNacimento;
-    @Column
-    private ArrayList<Contato> contatos = new ArrayList<>();
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "pessoa")
+    private List<Contato> contato = new ArrayList<>();
 
     public Pessoa() {
 
     }
 
-    public Pessoa(Integer id, String nome, String cpf, String dataNacimento) {
+    public Pessoa(Long id, String nome, String cpf, String dataNacimento) {
         super();
         this.id = id;
         this.nome = nome;
         this.cpf = cpf;
         this.dataNacimento = dataNacimento;
-        this.contatos = contatos;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -69,12 +68,9 @@ public class Pessoa implements Serializable {
     public void setDataNacimento(String dataNacimento) {
         this.dataNacimento = dataNacimento;
     }
-    public ArrayList<Contato> getContatos() {
-        return contatos;
-    }
 
-    public void adicionaContatos(Contato contato) {
-        contatos.add(contato);
+    public List<Contato> getContato() {
+        return contato;
     }
 
     @Override

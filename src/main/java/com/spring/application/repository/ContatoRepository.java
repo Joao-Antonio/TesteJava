@@ -1,10 +1,10 @@
 package com.spring.application.repository;
 
-import com.spring.application.domain.Pessoa;
+import com.spring.application.domain.Contato;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface PessoaRepository extends JpaRepository <Pessoa, Long> {
+public interface ContatoRepository extends JpaRepository <Contato, Long> {
 
 }

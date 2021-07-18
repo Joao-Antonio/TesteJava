@@ -3,20 +3,30 @@ package com.spring.application.resources;
 
 import com.spring.application.domain.Pessoa;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.spring.application.repository.PessoaRepository;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/pessoa")
 public class PessoaResource {
 
     @Autowired
     private PessoaRepository pessoaRepository;
 
-    @GetMapping("/pessoa")
-    public List<Pessoa> listaPessoas(){
-        return pessoaRepository.findAll();
+    @GetMapping
+    public ResponseEntity<List<Pessoa>> todasPessoas(){
+        List<Pessoa> list = pessoaRepository.findAll();
+        return ResponseEntity.ok().body(list);
+    }
+
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<Pessoa> procurarPorId(@PathVariable Long id) {
+		Pessoa pessoa = pessoaRepository.findById(id).get();
+        return ResponseEntity.ok().body(pessoa);
     }
 
 //    @PostMapping("/pessoa/salvar")

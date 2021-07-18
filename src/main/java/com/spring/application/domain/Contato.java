@@ -1,29 +1,42 @@
 package com.spring.application.domain;
 
-public class Contato extends Pessoa {
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Objects;
 
-    private Integer idContato;
+
+@Entity
+public class Contato implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long idContato;
     private String nomeContato;
     private String telefone;
     private String email;
 
-    public Contato() {
+    @ManyToOne
+    @JoinColumn(name = "pessoa_id")
+    private Pessoa pessoa;
+
+    public Contato(){
 
     }
 
-    public Contato(Integer idContato, String nomeContato, String telefone, String email) {
-        super();
+    public Contato(Long idContato, String nomeContato, String telefone, String email) {
         this.idContato = idContato;
         this.nomeContato = nomeContato;
         this.telefone = telefone;
         this.email = email;
     }
 
-    public Integer getIdContato() {
+    public Long getIdContato() {
         return idContato;
     }
 
-    public void setIdContato(Integer idContato) {
+    public void setIdContato(Long idContato) {
         this.idContato = idContato;
     }
 
@@ -52,9 +65,15 @@ public class Contato extends Pessoa {
     }
 
     @Override
-    public String toString() {
-        return "\n Contato [idContato=" + idContato + ", nomeContato=" + nomeContato + ", telefone=" + telefone
-                + ", email=" + email + "";
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Contato contato = (Contato) o;
+        return idContato.equals(contato.idContato);
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(idContato);
+    }
 }
