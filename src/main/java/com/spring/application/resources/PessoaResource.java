@@ -8,6 +8,7 @@ import com.spring.application.repository.PessoaRepository;
 import com.spring.application.transfer.PessoaTransfer;
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,12 +31,11 @@ public class PessoaResource {
     @GetMapping(value = "/pessoa/{id}")
     public ResponseEntity<Pessoa> procurarPorId(@PathVariable Long id) {
 		Pessoa pessoa = pessoaRepository.findById(id).get();
-//        pessoa.getContato();
         return ResponseEntity.ok().body(pessoa);
     }
 
     @PostMapping("/pessoa")
-    public PessoaTransfer insert(@RequestBody PessoaTransfer novaPessoa) {
+    public PessoaTransfer inserirPessoa(@RequestBody PessoaTransfer novaPessoa) {
         Pessoa pessoa = pessoaRepository.findByNome(novaPessoa.getNome());
         if (pessoa != null) {
             throw new ServiceException("Email já existe");
@@ -50,4 +50,29 @@ public class PessoaResource {
 
         return new PessoaTransfer(obj);
     }
+
+//    @PutMapping (value = "/pessoa/{id}")
+//    public <obj> ResponseEntity <PessoaTransfer> update(@PathVariable Long id, @RequestBody PessoaTransfer novaPessoa) {
+//        Pessoa pessoa = pessoaRepository.findByNome(novaPessoa.getNome());
+//        if (pessoa != null) {
+//            throw new ServiceException("Email já existe");
+//        }
+//
+//        Pessoa obj = new Pessoa();
+//        obj.setNome(novaPessoa.getNome());
+//        obj.setCpf(novaPessoa.getCpf());
+//        obj.setDataNacimento(novaPessoa.getDataNacimento());
+//
+//        obj = pessoaRepository.save(obj);
+//
+//        return new ResponseEntity<obj>(obj, HttpStatus.OK);
+//    }
+
+    @DeleteMapping (value = "/pessoa/{id}")
+    public ResponseEntity<Void> deletarPessoa(@PathVariable Long id) {
+        Pessoa pessoa = pessoaRepository.findById(id).get();
+        pessoaRepository.delete(pessoa);
+        return ResponseEntity.noContent().build();
+    }
+
 }

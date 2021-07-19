@@ -1,6 +1,7 @@
 package com.spring.application.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -24,7 +25,7 @@ public class Pessoa implements Serializable{
     @Column(nullable = false, length = 10)
     private String dataNacimento;
 
-    @JsonIgnore
+    @JsonManagedReference
     @OneToMany(mappedBy = "pessoa")
     private List<Contato> contato = new ArrayList<>();
 
