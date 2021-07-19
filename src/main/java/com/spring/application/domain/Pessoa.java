@@ -16,8 +16,12 @@ public class Pessoa implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
+    @Column(nullable = false, length = 50)
     private String nome;
+    @Column(nullable = false, length = 10)
     private String cpf;
+    @Column(nullable = false, length = 10)
     private String dataNacimento;
 
     @JsonIgnore
@@ -26,6 +30,9 @@ public class Pessoa implements Serializable{
 
     public Pessoa() {
 
+    }
+
+    public void Pessoa() {
     }
 
     public Pessoa(Long id, String nome, String cpf, String dataNacimento) {

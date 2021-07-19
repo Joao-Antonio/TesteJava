@@ -13,8 +13,11 @@ public class Contato implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long idContato;
+    @Column(nullable = false, length = 50)
     private String nomeContato;
+    @Column(nullable = false, length = 10)
     private String telefone;
+    @Column(nullable = false, length = 20)
     private String email;
 
     @ManyToOne
