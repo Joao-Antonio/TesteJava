@@ -1,6 +1,5 @@
 package com.spring.application.resources;
 
-
 import com.spring.application.domain.Pessoa;
 import com.spring.application.repository.PessoaRepository;
 import com.spring.application.transfer.PessoaTransfer;
@@ -8,6 +7,7 @@ import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
@@ -18,9 +18,6 @@ public class PessoaResource {
     @Autowired
     private PessoaRepository pessoaRepository;
 
-    @Autowired
-    private ContatoResource contatoResource;
-
     @GetMapping("/pessoa")
     public List<Pessoa> listarTodos() {
         return pessoaRepository.findAll();
@@ -30,6 +27,7 @@ public class PessoaResource {
     @GetMapping(value = "/pessoa/{id}")
     public ResponseEntity<Pessoa> procurarPorId(@PathVariable Long id) {
 		Pessoa pessoa = pessoaRepository.findById(id).get();
+
         return ResponseEntity.ok().body(pessoa);
     }
 
@@ -37,7 +35,7 @@ public class PessoaResource {
     public PessoaTransfer inserirPessoa(@RequestBody PessoaTransfer novaPessoa) {
         Pessoa pessoa = pessoaRepository.findByNome(novaPessoa.getNome());
         if (pessoa != null) {
-            throw new ServiceException("Email já existe");
+            throw new ServiceException("Pessoa, já existe!!!");
         }
 
         Pessoa obj = new Pessoa();

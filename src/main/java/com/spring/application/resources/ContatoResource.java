@@ -1,10 +1,8 @@
 package com.spring.application.resources;
 
 import com.spring.application.domain.Contato;
-import com.spring.application.domain.Pessoa;
 import com.spring.application.repository.ContatoRepository;
 import com.spring.application.transfer.ContatoTransfer;
-import com.spring.application.transfer.PessoaTransfer;
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -34,14 +32,13 @@ public class ContatoResource {
     public ContatoTransfer inserirContato(@RequestBody ContatoTransfer novoContato) {
         Contato contato = contatoRepository.findByNomeContato(novoContato.getNomeContato());
         if (contato != null) {
-            throw new ServiceException("Email já existe");
+            throw new ServiceException("Contato, já existe!!!");
         }
 
         Contato obj  = new Contato();
         obj.setNomeContato(novoContato.getNomeContato());
         obj.setTelefone(novoContato.getTelefone());
         obj.setEmail(novoContato.getEmail());
-
         obj = contatoRepository.save(obj);
 
         return new ContatoTransfer(obj);

@@ -20,7 +20,7 @@ public class Pessoa implements Serializable{
     private String nome;
     @Column(nullable = false, length = 10)
     private String cpf;
-    @Column(nullable = false, length = 10)
+    @Column(nullable = false, length = 12)
     private String dataNacimento;
 
     @JsonManagedReference
@@ -78,6 +78,10 @@ public class Pessoa implements Serializable{
 
     public List<Contato> getContato() {
         return contato;
+    }
+
+    public void setContato(List<Contato> contato) {
+        this.contato = contato;
     }
 
     @Override
