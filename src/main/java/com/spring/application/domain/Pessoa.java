@@ -35,12 +35,13 @@ public class Pessoa implements Serializable{
     public void Pessoa() {
     }
 
-    public Pessoa(Long id, String nome, String cpf, String dataNacimento) {
+    public Pessoa(Long id, String nome, String cpf, String dataNacimento, List<Contato> contato) {
         super();
         this.id = id;
         this.nome = nome;
         this.cpf = cpf;
         this.dataNacimento = dataNacimento;
+        this.contato = contato;
     }
 
     public Long getId() {

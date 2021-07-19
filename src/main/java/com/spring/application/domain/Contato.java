@@ -27,12 +27,16 @@ public class Contato implements Serializable {
     public Contato(){
 
     }
+    public void Contato(){
 
-    public Contato(Long idContato, String nomeContato, String telefone, String email) {
+    }
+
+    public Contato(Long idContato, String nomeContato, String telefone, String email, Pessoa pessoa) {
         this.idContato = idContato;
         this.nomeContato = nomeContato;
         this.telefone = telefone;
         this.email = email;
+        this.pessoa = pessoa;
     }
 
     public Long getIdContato() {
@@ -65,6 +69,14 @@ public class Contato implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Pessoa getPessoa() {
+        return pessoa;
+    }
+
+    public void setPessoa(Pessoa pessoa) {
+        this.pessoa = pessoa;
     }
 
     @Override
