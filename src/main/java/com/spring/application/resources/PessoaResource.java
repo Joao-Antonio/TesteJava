@@ -6,7 +6,6 @@ import com.spring.application.repository.PessoaRepository;
 import com.spring.application.transfer.PessoaTransfer;
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +17,9 @@ public class PessoaResource {
 
     @Autowired
     private PessoaRepository pessoaRepository;
+
+    @Autowired
+    private ContatoResource contatoResource;
 
     @GetMapping("/pessoa")
     public List<Pessoa> listarTodos() {
@@ -48,7 +50,7 @@ public class PessoaResource {
         return new PessoaTransfer(obj);
     }
 
-    @PutMapping (value = "/pessoa/{id}")
+    @PutMapping(value = "/pessoa/{id}")
     public Pessoa update(@PathVariable Long id, @RequestBody PessoaTransfer novaPessoa) {
         Pessoa pessoa = pessoaRepository.findById(id).get();
 
@@ -59,7 +61,7 @@ public class PessoaResource {
         return pessoaRepository.save(pessoa);
     }
 
-    @DeleteMapping (value = "/pessoa/{id}")
+    @DeleteMapping(value = "/pessoa/{id}")
     public ResponseEntity<Void> deletarPessoa(@PathVariable Long id) {
         Pessoa pessoa = pessoaRepository.findById(id).get();
         pessoaRepository.delete(pessoa);

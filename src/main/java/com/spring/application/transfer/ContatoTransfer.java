@@ -2,8 +2,6 @@ package com.spring.application.transfer;
 
 import com.spring.application.domain.Contato;
 
-import javax.persistence.Column;
-
 public class ContatoTransfer {
 
     private Long idContato;

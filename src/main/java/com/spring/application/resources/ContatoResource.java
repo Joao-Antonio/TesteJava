@@ -1,8 +1,10 @@
 package com.spring.application.resources;
 
 import com.spring.application.domain.Contato;
+import com.spring.application.domain.Pessoa;
 import com.spring.application.repository.ContatoRepository;
 import com.spring.application.transfer.ContatoTransfer;
+import com.spring.application.transfer.PessoaTransfer;
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +31,7 @@ public class ContatoResource {
     }
 
     @PostMapping("/contato")
-    public ContatoTransfer insert(@RequestBody ContatoTransfer novoContato) {
+    public ContatoTransfer inserirContato(@RequestBody ContatoTransfer novoContato) {
         Contato contato = contatoRepository.findByNomeContato(novoContato.getNomeContato());
         if (contato != null) {
             throw new ServiceException("Email já existe");
@@ -43,5 +45,23 @@ public class ContatoResource {
         obj = contatoRepository.save(obj);
 
         return new ContatoTransfer(obj);
+    }
+
+    @PutMapping(value = "/contato/{id}")
+    public Contato update(@PathVariable Long id, @RequestBody ContatoTransfer novoContato) {
+        Contato contato = contatoRepository.findById(id).get();
+
+        contato.setNomeContato(novoContato.getNomeContato());
+        contato.setTelefone(novoContato.getTelefone());
+        contato.setEmail(novoContato.getEmail());
+
+        return contatoRepository.save(contato);
+    }
+
+    @DeleteMapping(value = "/contato/{id}")
+    public ResponseEntity<Void> deletarContato(@PathVariable Long id) {
+        Contato contato = contatoRepository.findById(id).get();
+        contatoRepository.delete(contato);
+        return ResponseEntity.noContent().build();
     }
 }

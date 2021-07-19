@@ -2,8 +2,6 @@ package com.spring.application.transfer;
 
 import com.spring.application.domain.Pessoa;
 
-import javax.persistence.Column;
-
 public class PessoaTransfer {
 
     private Long id;
