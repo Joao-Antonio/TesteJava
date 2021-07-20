@@ -2,13 +2,14 @@ package com.spring.application.resources;
 
 import com.spring.application.domain.Pessoa;
 import com.spring.application.repository.PessoaRepository;
+import com.spring.application.service.PessoaService;
 import com.spring.application.transfer.PessoaTransfer;
-import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -18,6 +19,9 @@ public class PessoaResource {
     @Autowired
     private PessoaRepository pessoaRepository;
 
+    @Autowired
+    private PessoaService pessoaService;
+
     @GetMapping("/pessoa")
     public List<Pessoa> listarTodos() {
         return pessoaRepository.findAll();
@@ -26,43 +30,28 @@ public class PessoaResource {
 
     @GetMapping(value = "/pessoa/{id}")
     public ResponseEntity<Pessoa> procurarPorId(@PathVariable Long id) {
-		Pessoa pessoa = pessoaRepository.findById(id).get();
-
+		Pessoa pessoa = pessoaService.buscarId(id);
         return ResponseEntity.ok().body(pessoa);
     }
 
     @PostMapping("/pessoa")
-    public PessoaTransfer inserirPessoa(@RequestBody PessoaTransfer novaPessoa) {
-        Pessoa pessoa = pessoaRepository.findByNome(novaPessoa.getNome());
-        if (pessoa != null) {
-            throw new ServiceException("Pessoa, já existe!!!");
-        }
-
-        Pessoa obj = new Pessoa();
-        obj.setNome(novaPessoa.getNome());
-        obj.setCpf(novaPessoa.getCpf());
-        obj.setDataNacimento(novaPessoa.getDataNacimento());
-
-        obj = pessoaRepository.save(obj);
-
-        return new PessoaTransfer(obj);
+    public ResponseEntity<Void> inserirPessoa(@RequestBody Pessoa obj){
+        obj = pessoaService.inserir(obj);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("{id}")
+                .buildAndExpand(obj.getId()).toUri();
+        return ResponseEntity.created(uri).build();
     }
 
     @PutMapping(value = "/pessoa/{id}")
-    public Pessoa update(@PathVariable Long id, @RequestBody PessoaTransfer novaPessoa) {
-        Pessoa pessoa = pessoaRepository.findById(id).get();
-
-        pessoa.setNome(novaPessoa.getNome());
-        pessoa.setCpf(novaPessoa.getCpf());
-        pessoa.setDataNacimento(novaPessoa.getDataNacimento());
-
-        return pessoaRepository.save(pessoa);
+    public ResponseEntity<Void>  update(@PathVariable Long id, @RequestBody Pessoa novaPessoa){
+        novaPessoa.setId(id);
+        pessoaService.modificar(novaPessoa);
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping(value = "/pessoa/{id}")
     public ResponseEntity<Void> deletarPessoa(@PathVariable Long id) {
-        Pessoa pessoa = pessoaRepository.findById(id).get();
-        pessoaRepository.delete(pessoa);
+        pessoaService.deletar(id);
         return ResponseEntity.noContent().build();
     }
 
