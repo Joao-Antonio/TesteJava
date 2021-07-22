@@ -5,8 +5,8 @@ import com.spring.application.domain.dto.NovaPessoaDTO;
 import com.spring.application.repository.PessoaRepository;
 import com.spring.application.services.PessoaService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -37,7 +37,7 @@ public class PessoaResource {
     }
 
     @PostMapping("/pessoa")
-    public ResponseEntity<Void> inserirPessoa(@RequestBody NovaPessoaDTO pessoaDTO){
+    public ResponseEntity<Void> inserirPessoa(@Validated @RequestBody NovaPessoaDTO pessoaDTO){
         Pessoa pessoa = pessoaService.pessoaContatoDTO(pessoaDTO);
         pessoaService.inserir(pessoa);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("{id}")

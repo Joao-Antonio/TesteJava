@@ -1,6 +1,7 @@
 package com.spring.application.domain;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -18,7 +19,8 @@ public class Pessoa implements Serializable{
 
     @Column(nullable = false, length = 50)
     private String nome;
-    @Column(nullable = false, length = 10)
+
+    @Column(nullable = false, length = 12)
     private String cpf;
     @Column(nullable = false, length = 12)
     private String dataNacimento;

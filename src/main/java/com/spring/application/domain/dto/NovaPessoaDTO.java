@@ -1,14 +1,17 @@
 package com.spring.application.domain.dto;
 
+import org.hibernate.validator.constraints.br.CPF;
+
 import java.io.Serializable;
 
 public class NovaPessoaDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private String nome;
+
+    @CPF
     private String cpf;
     private String dataNacimento;
-
     private String nomeContato;
     private String telefone;
     private String email;
