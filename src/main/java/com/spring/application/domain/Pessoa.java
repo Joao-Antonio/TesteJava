@@ -34,13 +34,12 @@ public class Pessoa implements Serializable{
     public void Pessoa() {
     }
 
-    public Pessoa(Long id, String nome, String cpf, String dataNacimento, List<Contato> contato) {
+    public Pessoa(Long id, String nome, String cpf, String dataNacimento) {
         super();
         this.id = id;
         this.nome = nome;
         this.cpf = cpf;
         this.dataNacimento = dataNacimento;
-        this.contato = contato;
     }
 
     public Long getId() {
@@ -78,10 +77,6 @@ public class Pessoa implements Serializable{
 
     public List<Contato> getContato() {
         return contato;
-    }
-
-    public void setContato(List<Contato> contato) {
-        this.contato = contato;
     }
 
     @Override
