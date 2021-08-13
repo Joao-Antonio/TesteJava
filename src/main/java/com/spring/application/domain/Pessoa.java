@@ -26,7 +26,7 @@ public class Pessoa implements Serializable{
     private String dataNacimento;
 
     @JsonManagedReference
-    @OneToMany(mappedBy = "pessoa")
+    @OneToMany(mappedBy = "pessoa", cascade = CascadeType.ALL)
     private List<Contato> contato = new ArrayList<>();
 
     public Pessoa() {
@@ -55,17 +55,14 @@ public class Pessoa implements Serializable{
     public String getNome() {
         return nome;
     }
-
-
+    
     public void setNome(String nome) {
         this.nome = nome;
     }
 
-
     public String getCpf() {
         return cpf;
     }
-
 
     public void setCpf(String cpf) {
         this.cpf = cpf;

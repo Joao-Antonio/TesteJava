@@ -3,14 +3,14 @@ package com.spring.application.resources;
 import com.spring.application.domain.Pessoa;
 import com.spring.application.domain.dto.NovaPessoaDTO;
 import com.spring.application.repository.PessoaRepository;
+import com.spring.application.services.ContatoService;
 import com.spring.application.services.PessoaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -23,6 +23,9 @@ public class PessoaResource {
     @Autowired
     private PessoaService pessoaService;
 
+    @Autowired
+    private ContatoService contatoService;
+
     @GetMapping("/pessoa")
     public ResponseEntity<List <Pessoa>> todasPessoas() {
         List<Pessoa> lista = pessoaService.listarTodos();
@@ -31,31 +34,31 @@ public class PessoaResource {
     }
 
     @GetMapping(value = "/pessoa/{id}")
-    public ResponseEntity<Pessoa> procurarPorId(@PathVariable Long id) {
+    public ResponseEntity<Pessoa> procurarPorId(@PathVariable("id") Long id){
 		Pessoa pessoa = pessoaService.buscarId(id);
         return ResponseEntity.ok().body(pessoa);
     }
 
     @PostMapping("/pessoa")
-    public ResponseEntity<Void> inserirPessoa(@Validated @RequestBody NovaPessoaDTO pessoaDTO){
-        Pessoa pessoa = pessoaService.pessoaContatoDTO(pessoaDTO);
-        pessoaService.inserir(pessoa);
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("{id}")
-                .buildAndExpand(pessoa.getId()).toUri();
-        return ResponseEntity.created(uri).build();
+    public ResponseEntity<Pessoa> inserirPessoa(@Validated @RequestBody NovaPessoaDTO pessoaDTO){
+        Pessoa novaPessoa = pessoaService.pessoaContatoDTO(pessoaDTO);
+        pessoaService.inserir(novaPessoa);
+        return new ResponseEntity<>(novaPessoa, HttpStatus.CREATED);
     }
 
     @PutMapping(value = "/pessoa/{id}")
-    public ResponseEntity<Void>  update(@PathVariable Long id, @RequestBody Pessoa novaPessoa){
+    public ResponseEntity<Pessoa> update(@PathVariable Long id, @RequestBody Pessoa novaPessoa){
         novaPessoa.setId(id);
         pessoaService.modificar(novaPessoa);
-        return ResponseEntity.noContent().build();
+        return new ResponseEntity<>(novaPessoa, HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/pessoa/{id}")
-    public ResponseEntity<Void> deletarPessoa(@PathVariable Long id) {
+    public ResponseEntity<Void> deletarPessoa(@PathVariable Long id){
         pessoaService.deletar(id);
         return ResponseEntity.noContent().build();
     }
+
+
 
 }

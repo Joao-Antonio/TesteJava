@@ -29,6 +29,7 @@ public class Contato implements Serializable {
     public Contato(){
 
     }
+
     public void Contato(){
 
     }

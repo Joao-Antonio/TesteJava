@@ -1,64 +1,46 @@
 package com.spring.application.resources;
 
 import com.spring.application.domain.Contato;
+import com.spring.application.domain.dto.ContatoDTO;
 import com.spring.application.repository.ContatoRepository;
-import com.spring.application.transfer.ContatoTransfer;
-import org.hibernate.service.spi.ServiceException;
+import com.spring.application.services.ContatoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api")
 public class ContatoResource {
 
     @Autowired
+    private ContatoService contatoService;
+    @Autowired
     private ContatoRepository contatoRepository;
 
-    @GetMapping("/contato")
-    public List<Contato> listarTodos() {
-        return contatoRepository.findAll();
-    }
+    @PostMapping(value = "/contato/{id}")
+    public ResponseEntity<Contato> adicionarContato(@PathVariable Long id, @RequestBody Contato contato){
+        Contato novoContato = new Contato();
 
-    @GetMapping(value = "/contato/{id}")
-    public ResponseEntity<Contato> procurarPorId(@PathVariable Long id) {
-        Contato contato = contatoRepository.findById(id).get();
-        return ResponseEntity.ok().body(contato);
-    }
+        novoContato = contatoService.adicionarContato(id, contato);
 
-    @PostMapping("/contato")
-    public ContatoTransfer inserirContato(@RequestBody ContatoTransfer novoContato) {
-        Contato contato = contatoRepository.findByNomeContato(novoContato.getNomeContato());
-        if (contato != null) {
-            throw new ServiceException("Contato, já existe!!!");
-        }
-
-        Contato obj  = new Contato();
-        obj.setNomeContato(novoContato.getNomeContato());
-        obj.setTelefone(novoContato.getTelefone());
-        obj.setEmail(novoContato.getEmail());
-        obj = contatoRepository.save(obj);
-
-        return new ContatoTransfer(obj);
+        return new ResponseEntity<>(novoContato, HttpStatus.OK);
     }
 
     @PutMapping(value = "/contato/{id}")
-    public Contato update(@PathVariable Long id, @RequestBody ContatoTransfer novoContato) {
-        Contato contato = contatoRepository.findById(id).get();
-
+    public ResponseEntity<Contato> update(@PathVariable Long id, @RequestBody ContatoDTO novoContato){
+        Contato contato  = contatoService.buscarId(id);
         contato.setNomeContato(novoContato.getNomeContato());
-        contato.setTelefone(novoContato.getTelefone());
         contato.setEmail(novoContato.getEmail());
+        contato.setTelefone(novoContato.getTelefone());
 
-        return contatoRepository.save(contato);
+        contatoService.modificar(contato);
+        return new ResponseEntity<>(contato, HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/contato/{id}")
-    public ResponseEntity<Void> deletarContato(@PathVariable Long id) {
-        Contato contato = contatoRepository.findById(id).get();
-        contatoRepository.delete(contato);
+    public ResponseEntity<Void> deletarPessoa(@PathVariable Long id){
+        contatoService.deletar(id);
         return ResponseEntity.noContent().build();
     }
 }
